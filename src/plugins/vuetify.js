@@ -1,8 +1,11 @@
-import Vue from "vue";
-import Vuetify from "vuetify/lib";
+import Vue from 'vue'
+import Vuetify from 'vuetify/lib'
 import colors from 'vuetify/lib/util/colors'
+import VuetifyDialog from 'vuetify-dialog'
+import 'vuetify-dialog/dist/vuetify-dialog.css'
 
-Vue.use(Vuetify);
+Vue.use(Vuetify)
+Vue.use(VuetifyDialog)
 
 export default new Vuetify({
   icons: {

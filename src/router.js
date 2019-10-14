@@ -1,11 +1,12 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Login from "./views/Login.vue";
-import Home from "./views/Home.vue";
 
 Vue.use(Router);
 
 export default new Router({
+  mode: "history",
+  base: process.env.BASE_URL,
   routes: [
     {
       path: "/",
@@ -13,9 +14,14 @@ export default new Router({
       component: Login
     },
     {
+      path: "/registro",
+      name: "registro",
+      component: () => import("./views/CreateAccount.vue")
+    },
+    {
       path: "/home",
-      name: "painel",
-      component: Home
+      name: "home",
+      component: () => import("./views/Home.vue")
     }
   ]
 });

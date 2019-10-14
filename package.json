@@ -13,6 +13,7 @@
     "vue-router": "^3.0.3",
     "vue-session": "^1.0.0",
     "vuetify": "^2.1.0",
+    "vuetify-dialog": "^1.0.0-alpha.5",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

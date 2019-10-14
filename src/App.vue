@@ -9,19 +9,14 @@
     </v-app-bar>
 
     <v-content>
-      <LoginPage />
+      <router-view />
     </v-content>
   </v-app>
 </template>
 
 <script>
-import LoginPage from "./components/LoginBlock";
-
 export default {
   name: "RMD",
-  components: {
-    LoginPage
-  },
   data: () => ({
     //
   }),
