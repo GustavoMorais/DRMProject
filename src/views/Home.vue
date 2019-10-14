@@ -1,15 +1,22 @@
 <template>
-  <div class="about">
-    <h1>This is an about page</h1>
-    <h1 v-text="$route.params.token"></h1>
-  </div>
+  <v-container>
+    <NavBar></NavBar>
+    <div class="about">
+      <h1>This is an about page</h1>
+    </div>
+  </v-container>
 </template>
 <script>
+import NavBar from "../components/NavBar.vue"
+
 export default {
-  data() {
-    return {
-      token: $route.params.token
-    }
+  components: {
+    NavBar,
   },
-}
+  data() {
+    return {};
+  },
+  async created() {
+  }
+};
 </script>

@@ -22,6 +22,21 @@ export default new Router({
       path: "/home",
       name: "home",
       component: () => import("./views/Home.vue")
+    },
+    {
+      path: "/newproject",
+      name: "newproject",
+      component: () => import("./views/NewProject.vue")
+    },
+    {
+      path: "/risklist",
+      name: "risklist",
+      component: () => import("./views/RiskList.vue")
+    },
+    {
+      path: "/logout",
+      name: "logout",
+      component: () => import("./views/Logout.vue")
     }
   ]
 });
