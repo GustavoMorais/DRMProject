@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <v-app-bar app class="primary">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="headline text-uppercase white--text">
@@ -38,7 +38,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-  </v-container>
+  </div>
 </template>
 <script>
 export default {
@@ -47,7 +47,7 @@ export default {
       drawer: null,
       username: "carregando...",
       usermail: null,
-      userpic: "http://localhost/rmd/assets/img/avatar.jpg",
+      userpic: "http://192.168.1.129/rmd/assets/img/avatar.jpg",
       items: [
         { title: 'Inicio', icon: 'mdi-monitor-dashboard', local: "/home" },
         { title: 'Novo Projeto', icon: 'mdi-folder-plus', local: "/newproject" },
@@ -64,7 +64,7 @@ export default {
       const response = await $.ajax(
         {
           type: "POST",
-          url: "http://localhost/rmd/data.php",
+          url: "http://192.168.1.129/rmd/data.php",
           data: {
             token: this.token
           }
@@ -76,9 +76,12 @@ export default {
         this.username = response.nome;
         this.usermail = response.email;
         //this.userpic = response.avatar;
+      }else{
+          this.$session.destroy();
+          this.$router.push("/");
       }
     } else {
-      this.$router.push({ name: "login" });
+      this.$router.push("/");
     }
   }
 };
