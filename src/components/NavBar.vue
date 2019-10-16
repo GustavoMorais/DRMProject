@@ -47,7 +47,7 @@ export default {
       drawer: null,
       username: "carregando...",
       usermail: null,
-      userpic: "http://192.168.1.129/rmd/assets/img/avatar.jpg",
+      userpic: "https://lucaspanao.ml/dl/assets/img/avatar.jpg",
       items: [
         { title: 'Inicio', icon: 'mdi-monitor-dashboard', local: "/home" },
         { title: 'Novo Projeto', icon: 'mdi-folder-plus', local: "/newproject" },
@@ -64,9 +64,10 @@ export default {
       const response = await $.ajax(
         {
           type: "POST",
-          url: "http://192.168.1.129/rmd/data.php",
+          url: "https://dl.lucaspanao.ml/data.php",
           data: {
-            token: this.token
+            token: this.token,
+            mode: 1
           }
         },
         "json"

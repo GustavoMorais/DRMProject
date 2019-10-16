@@ -17,7 +17,7 @@ export default {
     const response = await $.ajax(
       {
         type: "POST",
-        url: "http://192.168.1.129/rmd/logout.php",
+        url: "https://lucaspanao.ml/dl/logout.php",
         data: {
           token: this.$session.get("token")
         }

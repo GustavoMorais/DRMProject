@@ -102,7 +102,7 @@ export default {
         const response = await $.ajax(
           {
             type: "POST",
-            url: "http://192.168.1.129/rmd/login.php",
+            url: "https://lucaspanao.ml/dl/login.php",
             data: {
               username: btoa($("#login").val()),
               password: btoa($("#password").val())
