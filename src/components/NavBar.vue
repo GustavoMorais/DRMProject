@@ -12,7 +12,7 @@
       </v-btn>
     </v-app-bar>
 
-    <v-navigation-drawer v-model="drawer" absolute temporary>
+    <v-navigation-drawer v-model="drawer" app fixed>
       <v-list-item>
         <v-list-item-avatar>
           <v-img :src="userpic"></v-img>

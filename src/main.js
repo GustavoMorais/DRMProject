@@ -4,7 +4,10 @@ import router from "./router";
 import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueSession from 'vue-session'
+import money from 'v-money'
+
 Vue.use(VueSession)
+Vue.use(money, {precision: 4})
 
 Vue.config.productionTip = false;
 

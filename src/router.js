@@ -29,6 +29,11 @@ export default new Router({
       component: () => import("./views/NewProject.vue")
     },
     {
+      path: "/projectinfo",
+      name: "projectinfo",
+      component: () => import("./views/ProjectDetails.vue")
+    },
+    {
       path: "/risklist",
       name: "risklist",
       component: () => import("./views/RiskList.vue")

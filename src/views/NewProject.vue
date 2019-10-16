@@ -13,6 +13,7 @@
               v-model="projectname"
               :rules="ProjectRule"
               :counter="15"
+              prepend-icon="mdi-bullhorn"
               label="Nome do Projeto"
               required
             ></v-text-field>
@@ -23,6 +24,7 @@
               v-model="descricao"
               :rules="DescRule"
               :counter="50"
+              prepend-icon="mdi-folder-text"
               label="Descrição"
               required
             ></v-text-field>
@@ -33,6 +35,7 @@
               v-model="empresa"
               :rules="EmpresaRule"
               :counter="15"
+              prepend-icon="mdi-briefcase"
               label="Empresa"
               required
             ></v-text-field>
@@ -43,47 +46,55 @@
               v-model="responsavel"
               :rules="RespRule"
               :counter="15"
+              prepend-icon="mdi-account-tie"
               label="Gerente Responsável"
               required
             ></v-text-field>
           </v-col>
 
-          <v-dialog
-            ref="dialog"
-            v-model="modal"
-            :return-value.sync="date"
-            persistent
-            width="290px"
-          >
-            <template v-slot:activator="{ on }">
-              <v-text-field
-                v-model="date"
-                label="Data do Projeto"
-                prepend-icon="mdi-calendar-clock"
-                readonly
-                v-on="on"
-              ></v-text-field>
-            </template>
-            <v-date-picker v-model="date" scrollable>
-              <v-spacer></v-spacer>
-              <v-btn text color="primary" @click="modal = false">Cancelar</v-btn>
-              <v-btn text color="primary" @click="$refs.dialog.save(date), datadoprojeto = (new Date(date).getTime() / 1000)">OK</v-btn>
-            </v-date-picker>
-          </v-dialog>
+          <v-col cols="12" md="12">
+            <v-dialog
+              ref="dialog"
+              v-model="modal"
+              :return-value.sync="date"
+              persistent
+              width="290px"
+            >
+              <template v-slot:activator="{ on }">
+                <v-text-field
+                  v-model="date"
+                  id="dataproject"
+                  :rules="DateRule"
+                  label="Data do Projeto"
+                  prepend-icon="mdi-calendar-clock"
+                  readonly
+                  v-on="on"
+                ></v-text-field>
+              </template>
+              <v-date-picker v-model="date" scrollable>
+                <v-spacer></v-spacer>
+                <v-btn text color="primary" @click="modal = false">Cancelar</v-btn>
+                <v-btn text color="primary" @click="$refs.dialog.save(date), datadoprojeto = (new Date(date).getTime() / 1000)">OK</v-btn>
+              </v-date-picker>
+            </v-dialog>
+          </v-col>
 
           <v-col cols="12" md="12">
             <v-text-field
+              id="dinheiro"
               v-model="valor"
               :rules="ValorRule"
-              :counter="10"
+              v-model.lazy="price" 
+              v-money="money"
               label="Valor do Projeto"
+              prepend-icon="mdi-currency-usd"
               required
             ></v-text-field>
           </v-col>
 
           <v-col cols="12" md="12">
             <div class="text-center">
-                <v-btn block rounded color="primary" dark>Adicionar Projeto</v-btn>
+                <v-btn block rounded color="primary" @click="CriarNovoProjeto" dark>Adicionar Projeto</v-btn>
             </div>
           </v-col>
         </v-row>
@@ -93,14 +104,32 @@
 </template>
 <script>
 import NavBar from "../components/NavBar.vue";
+import {VMoney} from 'v-money';
 
 export default {
   data: () => ({
+    /* BRUH MOMENT */
+    price: 100,
+    money: {
+      decimal: ',',
+      thousands: '.',
+      prefix: 'R$ ',
+      suffix: '',
+      precision: 2,
+      masked: false
+    },
+    directives: {money: VMoney},
+    //========================
     modal: false,
     valid: false,
-    datadoprojeto: null,
-    firstname: "",
-    lastname: "",
+    /* FORM */
+    projectname: "",
+    descricao: "",
+    empresa: "",
+    responsavel: "",
+    valor: 0,
+    datadoprojeto: 0,
+    /* FORM */
     ProjectRule : [
       v => !!v || "Você precisa especificar um nome",
       v => v.length <= 15 || "O nome deve ser menor do que 15 caracteres"
@@ -115,17 +144,53 @@ export default {
       v => !!v || "Você precisa especificar um responsável",
       v => v.length <= 15 || "O nome do responsável deve ser menor do que 15 caracteres"
     ],
-    nameRules: [
-      v => !!v || "Name is required",
-      v => v.length <= 10 || "Name must be less than 10 characters"
+    DateRule: [
+      v => !!v || "Você precisa selecionar uma data"
     ],
-    
-    email: "",
-    emailRules: [
-      v => !!v || "E-mail is required",
-      v => /.+@.+/.test(v) || "E-mail must be valid"
+    ValorRule: [
+      v => !!v || "Você precisa selecionar o valor do projeto"
     ]
   }),
+  methods: {
+    async CriarNovoProjeto() {
+      let fixprice = this.price;
+      fixprice = fixprice.replace(/[^0-9,]+/g, "");
+      console.log(fixprice);
+      
+      if(this.projectname.length > 0 && this.responsavel.length > 0 &&
+         this.datadoprojeto > 0 && fixprice.length > 0){
+          const response = await $.ajax({
+             type: "POST",
+             url: "https://dl.lucaspanao.ml/data.php",
+             data: {
+                mode: 3,
+                token: this.$session.get("token"),
+                nomeprojeto: this.projectname,
+                descricao: this.descricao,
+                empresa: this.empresa,
+                responsavel: this.responsavel,
+                dataprojeto: this.datadoprojeto,
+                valordoprojeto: fixprice
+          }}, "json");
+
+          if(response.status === "done"){
+            this.$router.push('/home');
+          }
+      }
+    }
+  },
+  created () {
+    function dateToYMD(date) {
+      var d = date.getDate();
+      var m = date.getMonth() + 1;
+      var y = date.getFullYear();
+      return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+    }
+
+    this.date = dateToYMD(new Date());
+    this.datadoprojeto = (new Date(dateToYMD(new Date())).getTime() / 1000);
+    
+  },
   components: {
     NavBar
   }

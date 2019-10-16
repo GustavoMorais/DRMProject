@@ -13,7 +13,7 @@
         <v-list-item
           v-else
           :key="item.nome"
-          @click=""
+          @click="ViewProjectInfo(item.id)"
         >
           <v-list-item-avatar>
             <v-icon :class="item.nivel">{{item.icon}}</v-icon>
@@ -21,6 +21,8 @@
 
           <v-list-item-content>
             <v-list-item-title v-html="item.nome"></v-list-item-title>
+            <v-list-item-subtitle v-html="item.empresa"></v-list-item-subtitle>
+            <v-list-item-subtitle v-html="item.responsavel"></v-list-item-subtitle>
             <v-list-item-subtitle v-html="item.descricao"></v-list-item-subtitle>
             <v-list-item-subtitle v-html="item.status"></v-list-item-subtitle>
           </v-list-item-content>
@@ -51,6 +53,12 @@ export default {
   data: () => ({
     items: [],
   }),
+  methods: {
+    ViewProjectInfo(projectid) {
+      this.$session.set("projectviewid", projectid);
+      this.$router.push("/projectinfo");
+    }
+  },
   async created() {
       const resultado = await $.ajax({
         type: "POST",
@@ -63,9 +71,12 @@ export default {
       if (resultado) {
         var tmpArray = [];
         $.each(resultado, function (idx, value) {
-          tmpArray.push({icon: ArrIcon[value.status], nivel: ArrIconStyle[value.status], 
-                        nome: value.nome + ' <span class="grey--text body-2">'+(new Date(value.registrado * 1000).toLocaleDateString("pt-BR"))+'</span>', 
-                        descricao: "<span class='text--primary'>Resp: "+value.responsavel+"</span> &mdash; "+value.descricao, 
+          tmpArray.push({id: value.id,
+                        icon: ArrIcon[value.status], nivel: ArrIconStyle[value.status], 
+                        nome: value.nome + ' <span class="grey--text body-2">'+(new Date(value.registrado * 1000).toLocaleDateString("pt-BR"))+'</span>',
+                        empresa: value.empresa ? "<span class='text--primary'>Empresa: "+value.empresa+"</span>":"",
+                        responsavel: "<span class='text--primary'>Responsável: "+value.responsavel+"</span>",
+                        descricao: value.descricao, 
                         status: ArrStatus[value.status]});
           if(Object.keys(resultado).length !== (idx + 1)){
             tmpArray.push({ divider: true, inset: true });
