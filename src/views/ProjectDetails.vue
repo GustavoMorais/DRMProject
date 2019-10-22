@@ -68,6 +68,9 @@
         </v-list-item>
       </v-list-item-group>
     </v-list>
+    <v-btn fab dark large color="primary" to="/newrisk" fixed right bottom>
+        <v-icon dark>mdi-plus</v-icon>
+    </v-btn>
   </div>
 </template>
 <script>

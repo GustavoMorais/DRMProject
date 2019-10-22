@@ -55,32 +55,34 @@ export default {
     }
   },
   async created() {
-      this.$bus.$emit("openproject", {die: true})
-      const resultado = await $.ajax({
-        type: "POST",
-        url: "https://dl.lucaspanao.ml/data.php",
-        data: {
-          token: this.$session.get("token"),
-          mode: 2
-        }
-      }, "json");
-      if (resultado) {
-        var tmpArray = [];
-        $.each(resultado, function (idx, value) {
-          tmpArray.push({id: value.id,
-                        icon: ArrIcon[value.status], nivel: ArrIconStyle[value.status],
-                        nomeclean: value.nome,
-                        nome: value.nome + ' <span class="grey--text body-2">'+(new Date(value.registrado * 1000).toLocaleDateString("pt-BR"))+'</span>',
-                        empresa: value.empresa ? "<span class='text--primary'>Empresa: "+value.empresa+"</span>":"",
-                        responsavel: "<span class='text--primary'>Responsável: "+value.responsavel+"</span>",
-                        descricao: value.descricao, 
-                        status: ArrStatus[value.status]});
-          if(Object.keys(resultado).length !== (idx + 1)){
-            tmpArray.push({ divider: true, inset: true });
-          }
-        });
-        this.items = tmpArray;
+    this.$session.remove("projectviewid");
+    this.$bus.$emit("openproject", {die: true})
+    
+    const resultado = await $.ajax({
+      type: "POST",
+      url: "https://dl.lucaspanao.ml/data.php",
+      data: {
+        token: this.$session.get("token"),
+        mode: 2
       }
+    }, "json");
+    if (resultado) {
+      var tmpArray = [];
+      $.each(resultado, function (idx, value) {
+        tmpArray.push({id: value.id,
+                      icon: ArrIcon[value.status], nivel: ArrIconStyle[value.status],
+                      nomeclean: value.nome,
+                      nome: value.nome + ' <span class="grey--text body-2">'+(new Date(value.registrado * 1000).toLocaleDateString("pt-BR"))+'</span>',
+                      empresa: value.empresa ? "<span class='text--primary'>Empresa: "+value.empresa+"</span>":"",
+                      responsavel: "<span class='text--primary'>Responsável: "+value.responsavel+"</span>",
+                      descricao: value.descricao, 
+                      status: ArrStatus[value.status]});
+        if(Object.keys(resultado).length !== (idx + 1)){
+          tmpArray.push({ divider: true, inset: true });
+        }
+      });
+      this.items = tmpArray;
+    }
   }
 };
 </script>

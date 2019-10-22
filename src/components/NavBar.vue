@@ -10,9 +10,14 @@
         <span>{{ customtitle }}</span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn v-if="logado" icon>
+      <v-btn @click="exitproject" v-if="customtitle" icon>
+        <v-icon>mdi-window-close</v-icon>
+      </v-btn>
+      <!--
+      <v-btn v-if="logado && !customtitle" icon>
         <v-icon>mdi-bell</v-icon>
       </v-btn>
+      -->
     </v-app-bar>
 
     <v-navigation-drawer v-if="logado" v-model="drawer" app fixed>
@@ -71,10 +76,22 @@ export default {
         { title: 'Sair', icon: 'mdi-exit-to-app', local: "/logout" },
       ],
       itemsproject: [
-        { title: 'Inicio', icon: 'mdi-monitor-dashboard', local: "/home" }
+        { title: 'Informações do Projeto', icon: 'mdi-folder-information', local: "/projectinfo" },
+        { title: 'Novo Risco', icon: 'mdi-timeline-plus', local: "/newrisk" },
+        { title: 'Identificação de Riscos', icon: 'mdi-file-document-box-search', local: ""},
+        { title: 'Análise Quantitativa', icon: 'mdi-file-settings-variant', local: ""},
+        { title: 'Resposta aos Riscos', icon: 'mdi-hammer', local: ""},
+        { title: 'Sair do projeto', icon: 'mdi-window-close', local: "/home"},
       ],
       token: null
     };
+  },
+  methods: {
+    exitproject() {
+      this.$session.remove("projectviewid");
+      this.$bus.$emit("openproject", {die: true})
+      this.$router.push('/home').catch(err => {});
+    }
   },
   async created() {
     this.$bus.$on('logged', (resultado) => {
@@ -108,6 +125,7 @@ export default {
         this.customtitle = null
       }else{
         this.customtitle = data.titulo
+        //this.itemsproject[0].title = data.titulo
       }
     })
     
