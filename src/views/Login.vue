@@ -17,8 +17,8 @@
           </v-toolbar>
           <v-card-text>
             <v-form>
-              <v-text-field autocomplete="off" label="Usuário" id="login" prepend-icon="mdi-account" type="text"></v-text-field>
-              <v-text-field autocomplete="off" label="Senha" id="password" prepend-icon="mdi-lock" type="password"></v-text-field>
+              <v-text-field v-model="usuario" autocomplete="off" label="Usuário" prepend-icon="mdi-account" type="text"></v-text-field>
+              <v-text-field v-model="senha" autocomplete="off" label="Senha" prepend-icon="mdi-lock" type="password"></v-text-field>
             </v-form>
           </v-card-text>
           <v-card-actions>
@@ -36,6 +36,60 @@
     </v-snackbar>
   </v-container>
 </template>
+<script>
+import Vue from "vue";
+import router from "vue-router";
+
+export default {
+  name: "login",
+  props: {
+    source: String
+  },
+  data: () => ({
+    //Snackbar
+    snackbar: false,
+    snacktext: null,
+    timeout: 3000,
+    //============
+    dialog: false,
+    drawer: null,
+    loader: null,
+    loading: false,
+    //==== login input =====
+    usuario: null,
+    senha: null
+  }),
+  methods: {
+    async login() {
+      this.loader = "loading";
+      if (this.usuario !== null && this.senha !== null) {
+        const response = await $.ajax({
+          type: "POST",
+          url: "https://lucaspanao.ml/dl/login.php",
+          data: {
+            username: btoa(this.usuario),
+            password: btoa(this.senha)
+          }
+        },"json");
+        
+        if (response.status === "done") {
+          this.$session.start()
+          this.$session.set('token', response.token);
+          this.$bus.$emit('logged', true);
+          this.$router.push('/home').catch(err => {})
+        } else {
+          this.loader = null;
+          this.snacktext = "Usuário ou senha inválido";
+          this.snackbar = true;
+        }
+      }else{
+        this.snacktext = "Preencha todos os campos com os seus dados de acesso";
+        this.snackbar = true;
+      }
+    }
+  }
+};
+</script>
 <style>
 .custom-loader {
   animation: loader 1s infinite;
@@ -74,55 +128,3 @@
   }
 }
 </style>
-<script>
-import Vue from "vue";
-import router from "vue-router";
-
-export default {
-  name: "login",
-  props: {
-    source: String
-  },
-  data: () => ({
-    //Snackbar
-    snackbar: false,
-    snacktext: null,
-    timeout: 3000,
-    //============
-    dialog: false,
-    drawer: null,
-    loader: null,
-    loading: false
-  }),
-  methods: {
-    async login() {
-      this.loader = "loading";
-      if ($("#login").val() !== "" && $("#password").val() !== "") {
-        // vou testar
-        const response = await $.ajax(
-          {
-            type: "POST",
-            url: "https://lucaspanao.ml/dl/login.php",
-            data: {
-              username: btoa($("#login").val()),
-              password: btoa($("#password").val())
-            }
-          },
-          "json"
-        );
-        
-        if (response.status === "done") {
-          this.$session.start()
-          this.$session.set('token', response.token);
-          this.$router.push('/home');
-        } else {
-          //apresentar mensagem de falha
-          this.loader = null;
-          this.snacktext = "Usuário ou senha inválido";
-          this.snackbar = true;
-        }
-      }
-    }
-  }
-};
-</script>

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar></NavBar>
     <v-form class="mx-5" v-model="valid">
       <v-container>
         <v-row>
@@ -103,7 +102,6 @@
   </div>
 </template>
 <script>
-import NavBar from "../components/NavBar.vue";
 import {VMoney} from 'v-money';
 
 export default {
@@ -190,9 +188,6 @@ export default {
     this.date = dateToYMD(new Date());
     this.datadoprojeto = (new Date(dateToYMD(new Date())).getTime() / 1000);
     
-  },
-  components: {
-    NavBar
   }
 };
 </script>

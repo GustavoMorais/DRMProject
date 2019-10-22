@@ -14,18 +14,13 @@
 <script>
 export default {
   async created() {
-    const response = await $.ajax(
-      {
-        type: "POST",
-        url: "https://lucaspanao.ml/dl/logout.php",
-        data: {
-          token: this.$session.get("token")
-        }
-      },
-      "json"
-    );
+    const response = await $.ajax({
+      type: "POST",
+      url: "https://lucaspanao.ml/dl/logout.php",
+      data: { token: this.$session.get("token") }
+    },"json");
 
-    console.log(response);
+    this.$bus.$emit('logged', false);
     this.$session.destroy();
     this.$router.push('/');
   }

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar></NavBar>
     <v-list three-line>
       <v-subheader>Projetos</v-subheader>
       <template v-for="(item, index) in items">
@@ -13,7 +12,7 @@
         <v-list-item
           v-else
           :key="item.nome"
-          @click="ViewProjectInfo(item.id)"
+          @click="ViewProjectInfo(item.id, item.nomeclean)"
         >
           <v-list-item-avatar>
             <v-icon :class="item.nivel">{{item.icon}}</v-icon>
@@ -35,8 +34,6 @@
   </div>
 </template>
 <script>
-import NavBar from "../components/NavBar.vue"
-
 //Definições Comuns, para diminuir o consumo de banda
 var ArrIcon       = ["mdi-shield-plus", "mdi-shield-search", "mdi-shield-search", "mdi-shield-alert", "mdi-shield-check"]
 var ArrIconStyle  = ["display-1 grey--text", "display-1 yellow--text", "display-1 yellow--text text--darken-2", "display-1 yellow--text text--darken-4", "display-1 green--text text--accent-3"]
@@ -47,19 +44,18 @@ var ArrStatus     = ["<span class='grey--text'>Nenhum risco cadastrado</span>",
                       "<span class='green--text text--accent-3'>Projeto Finalizado</span>"]
 
 export default {
-  components: {
-    NavBar,
-  },
   data: () => ({
     items: [],
   }),
   methods: {
-    ViewProjectInfo(projectid) {
+    ViewProjectInfo(projectid, nome) {
       this.$session.set("projectviewid", projectid);
-      this.$router.push("/projectinfo");
+      this.$router.push('/projectinfo').catch(err => {})
+      this.$bus.$emit("openproject", {titulo: nome})
     }
   },
   async created() {
+      this.$bus.$emit("openproject", {die: true})
       const resultado = await $.ajax({
         type: "POST",
         url: "https://dl.lucaspanao.ml/data.php",
@@ -72,7 +68,8 @@ export default {
         var tmpArray = [];
         $.each(resultado, function (idx, value) {
           tmpArray.push({id: value.id,
-                        icon: ArrIcon[value.status], nivel: ArrIconStyle[value.status], 
+                        icon: ArrIcon[value.status], nivel: ArrIconStyle[value.status],
+                        nomeclean: value.nome,
                         nome: value.nome + ' <span class="grey--text body-2">'+(new Date(value.registrado * 1000).toLocaleDateString("pt-BR"))+'</span>',
                         empresa: value.empresa ? "<span class='text--primary'>Empresa: "+value.empresa+"</span>":"",
                         responsavel: "<span class='text--primary'>Responsável: "+value.responsavel+"</span>",

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NavBar></NavBar>
     <v-list two-line subheader>
       <v-subheader>Informações do Projeto</v-subheader>
 
@@ -72,12 +71,7 @@
   </div>
 </template>
 <script>
-import NavBar from "../components/NavBar.vue";
-
 export default {
-  components: {
-    NavBar
-  },
   data() {
       return {
         listrisco: [],
@@ -92,32 +86,32 @@ export default {
   async created () {
       
       if(this.$session.has("projectviewid")){
-            function numberToReal(numero) {
-                var numero = numero.toFixed(2).split('.');
-                numero[0] = "R$ " + numero[0].split(/(?=(?:...)*$)/).join('.');
-                return numero.join(',');
-            }
+        function numberToReal(numero) {
+            var numero = numero.toFixed(2).split('.');
+            numero[0] = "R$ " + numero[0].split(/(?=(?:...)*$)/).join('.');
+            return numero.join(',');
+        }
 
-            const resultado = await $.ajax({
-                type: "POST",
-                url: "https://dl.lucaspanao.ml/data.php",
-                data: {
-                    idprojeto: this.$session.get("projectviewid"),
-                    token: this.$session.get("token"),
-                    mode: 4
-                }
-            }, "json");
-            if (resultado) {
-                var atual = parseInt(resultado.valor);
-                this.nomedoprojeto = resultado.nome;
-                this.empresa = resultado.empresa ? resultado.empresa:"Nenhuma empresa cadastrada";
-                this.responsavel = resultado.responsavel;
-                this.descricao = resultado.descricao ? resultado.descricao:"Nenhuma descrição cadastrada";
-                this.valordoprojeto = numberToReal(atual);
-                this.datadoprojeto = new Date(resultado.registrado * 1000).toLocaleDateString("pt-BR");
+        const resultado = await $.ajax({
+            type: "POST",
+            url: "https://dl.lucaspanao.ml/data.php",
+            data: {
+                idprojeto: this.$session.get("projectviewid"),
+                token: this.$session.get("token"),
+                mode: 4
             }
+        }, "json");
+        if (resultado) {
+            var atual = parseInt(resultado.valor);
+            this.nomedoprojeto = resultado.nome;
+            this.empresa = resultado.empresa ? resultado.empresa:"Nenhuma empresa cadastrada";
+            this.responsavel = resultado.responsavel;
+            this.descricao = resultado.descricao ? resultado.descricao:"Nenhuma descrição cadastrada";
+            this.valordoprojeto = numberToReal(atual);
+            this.datadoprojeto = new Date(resultado.registrado * 1000).toLocaleDateString("pt-BR");
+        }
       }else{
-          this.$router.push("/home");
+        this.$router.push("/home");
       }
       
   },
