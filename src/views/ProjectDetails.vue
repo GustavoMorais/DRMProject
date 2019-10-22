@@ -47,7 +47,15 @@
     </v-list>
 
     <v-divider></v-divider>
-
+    <div class="bgdark">
+    <v-subheader>Ações para o Projeto</v-subheader>
+    <v-col class="text-center" cols="12" sm="4">
+      <div class="my-0">
+        <v-btn block text><v-icon left>mdi-pencil</v-icon> Editar as Informações</v-btn>
+        <v-btn block text small color="error"><v-icon left>mdi-delete</v-icon>Deletar o Projeto</v-btn>
+      </div>
+    </v-col>
+    </div>
     <v-divider></v-divider>
 
     <v-list subheader two-line flat>
@@ -120,3 +128,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.bgdark {
+  background: #424242 !important;
+}
+</style>
