@@ -1,5 +1,5 @@
 # DRM Project
-O projeto basicamente, é um projeto de gerenciamento de risco, onde você poderá cadastrar projetos e riscos que provavelmente podem acontecer, com isso você terá todos os dados, por exemplo, a probabilidade de acontecer, o quanto você perderá se o risco ocorrer e outros detalhes
+O projeto basicamente, é uma ferramenta de gerenciamento de risco, onde você poderá cadastrar projetos e riscos que provavelmente podem acontecer, com isso você terá todos os dados, como por exemplo, a probabilidade de acontecer, o quanto você perderá se o risco ocorrer e outros detalhes técnicos.
 
 ## Compilar o projeto
 Primeiro faça um clone desse repositório em algum local no seu computador
