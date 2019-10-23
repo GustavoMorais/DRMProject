@@ -151,12 +151,8 @@ export default {
   }),
   methods: {
     async CriarNovoProjeto() {
-      let fixprice = this.price;
-      fixprice = fixprice.replace(/[^0-9,]+/g, "");
-      console.log(fixprice);
-      
       if(this.projectname.length > 0 && this.responsavel.length > 0 &&
-         this.datadoprojeto > 0 && fixprice.length > 0){
+         this.datadoprojeto > 0 && this.price.length > 0){
           const response = await $.ajax({
              type: "POST",
              url: "https://dl.lucaspanao.ml/data.php",
@@ -168,11 +164,11 @@ export default {
                 empresa: this.empresa,
                 responsavel: this.responsavel,
                 dataprojeto: this.datadoprojeto,
-                valordoprojeto: fixprice
+                valordoprojeto: this.price
           }}, "json");
 
           if(response.status === "done"){
-            this.$router.push('/home');
+            this.$router.push('/home').catch(err => {})
           }
       }
     }

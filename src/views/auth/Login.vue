@@ -8,11 +8,11 @@
             <div class="flex-grow-1"></div>
             <v-tooltip right>
               <template v-slot:activator="{ on }">
-                <v-btn to="/registro" :href="source" icon large v-on="on">
+                <v-btn to="/criarconta" :href="source" icon large v-on="on">
                   <v-icon>mdi-account-plus-outline</v-icon>
                 </v-btn>
               </template>
-              <span>Ajuda</span>
+              <span>Criar uma conta</span>
             </v-tooltip>
           </v-toolbar>
           <v-card-text>

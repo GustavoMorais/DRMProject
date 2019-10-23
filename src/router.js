@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Login from "./views/Login.vue";
 
 Vue.use(Router);
 
@@ -12,12 +11,12 @@ export default new Router({
     {
       path: "/",
       name: "login",
-      component: Login
+      component: () => import("./views/auth/Login.vue")
     },
     {
-      path: "/registro",
-      name: "registro",
-      component: () => import("./views/CreateAccount.vue")
+      path: "/criarconta",
+      name: "criarconta",
+      component: () => import("./views/auth/CreateAccount.vue")
     },
 
     /* DASHBOARD */
@@ -41,17 +40,17 @@ export default new Router({
     {
       path: "/projectinfo",
       name: "projectinfo",
-      component: () => import("./views/ProjectDetails.vue")
+      component: () => import("./views/projeto/ProjectDetails.vue")
     },
     {
       path: "/newrisk",
       name: "newrisk",
-      component: () => import("./views/NewRisk.vue")
+      component: () => import("./views/projeto/NewRisk.vue")
     },
     {
       path: "/risklist",
       name: "risklist",
-      component: () => import("./views/RiskList.vue")
+      component: () => import("./views/projeto/RiskList.vue")
     }
   ]
 });

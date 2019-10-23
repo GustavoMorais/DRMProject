@@ -49,7 +49,7 @@
     <v-divider></v-divider>
     <div class="bgdark">
     <v-subheader>Ações para o Projeto</v-subheader>
-    <v-col class="text-center" cols="12" sm="4">
+    <v-col class="text-center" cols="12" sm="12">
       <div class="my-0">
         <v-btn block text><v-icon left>mdi-pencil</v-icon> Editar as Informações</v-btn>
         <v-btn block text small color="error"><v-icon left>mdi-delete</v-icon>Deletar o Projeto</v-btn>
@@ -61,16 +61,15 @@
     <v-list subheader two-line flat>
       <v-subheader>Riscos</v-subheader>
 
-      <v-list-item-group v-model="listrisco" multiple>
-        <v-list-item>
-          <template v-slot:default="{ active, toggle }">
-            <v-list-item-action>
-              <v-checkbox v-model="active" color="primary" @click="toggle"></v-checkbox>
+      <v-list-item-group multiple>
+        <v-list-item :ripple="false" v-for="(item, index) in listrisco" :key="index">
+          <template>
+            <v-list-item-action style="margin-right: 12px;" :key="index">
+              <v-switch v-model="selected" @click="checkbox_select($event)" inset :ripple="false" color="primary" :value="item.idtarget"></v-switch>
             </v-list-item-action>
 
-            <v-list-item-content>
-              <v-list-item-title>Risco de exemplo</v-list-item-title>
-              <v-list-item-subtitle>R$ 0,00 &mdash; Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec suscipit purus sed convallis ullamcorper.</v-list-item-subtitle>
+            <v-list-item-content :key="item.idtarget">
+              <v-list-item-title v-html="item.nome"></v-list-item-title>
             </v-list-item-content>
           </template>
         </v-list-item>
@@ -85,6 +84,7 @@
 export default {
   data() {
       return {
+        selected: [],
         listrisco: [],
         nomedoprojeto: "carregando...",
         empresa: "carregando...",
@@ -94,15 +94,13 @@ export default {
         datadoprojeto: "carregando..."
       }
   },
+  methods: {
+    checkbox_select(evento) {
+      console.log(evento.target)
+    }
+  },
   async created () {
-      
       if(this.$session.has("projectviewid")){
-        function numberToReal(numero) {
-            var numero = numero.toFixed(2).split('.');
-            numero[0] = "R$ " + numero[0].split(/(?=(?:...)*$)/).join('.');
-            return numero.join(',');
-        }
-
         const resultado = await $.ajax({
             type: "POST",
             url: "https://dl.lucaspanao.ml/data.php",
@@ -113,18 +111,36 @@ export default {
             }
         }, "json");
         if (resultado) {
-            var atual = parseInt(resultado.valor);
             this.nomedoprojeto = resultado.nome;
             this.empresa = resultado.empresa ? resultado.empresa:"Nenhuma empresa cadastrada";
             this.responsavel = resultado.responsavel;
             this.descricao = resultado.descricao ? resultado.descricao:"Nenhuma descrição cadastrada";
-            this.valordoprojeto = numberToReal(atual);
+            this.valordoprojeto = resultado.valor;
             this.datadoprojeto = new Date(resultado.registrado * 1000).toLocaleDateString("pt-BR");
         }
+
+        const resultado2 = await $.ajax({
+            type: "POST",
+            url: "https://dl.lucaspanao.ml/data.php",
+            data: {
+                idprojeto: this.$session.get("projectviewid"),
+                token: this.$session.get("token"),
+                mode: 6
+            }
+        }, "json");
+        if (resultado2) {
+          resultado2.forEach(elemento => {
+            this.listrisco.push({
+              idtarget: elemento.id,
+              nome: elemento.nome,
+              checked: elemento.project_id === this.$session.get("projectviewid") ? true:false
+            });
+            this.selected.push(elemento.project_id === this.$session.get("projectviewid") ? elemento.id:0)
+          });
+        }
       }else{
-        this.$router.push("/home");
-      }
-      
+        this.$router.push('/home').catch(err => {})
+      } 
   },
 };
 </script>

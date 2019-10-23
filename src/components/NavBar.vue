@@ -130,6 +130,9 @@ export default {
     })
     
     if (this.$session.has("token")) {
+      if(this.$session.has("projectviewid"))
+        this.$router.push('/home').catch(err => {})
+
       this.token = this.$session.get("token");
 
       const response = await $.ajax({
