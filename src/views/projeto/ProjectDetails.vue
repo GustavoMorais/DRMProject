@@ -97,6 +97,10 @@ export default {
   methods: {
     checkbox_select(evento) {
       console.log(evento.target)
+      console.log({
+        status: evento.target.checked,
+        id: evento.target.value
+      })
     }
   },
   async created () {
