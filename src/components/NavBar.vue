@@ -71,7 +71,6 @@ export default {
       userpic: "https://lucaspanao.ml/dl/assets/img/avatar.jpg",
       items: [
         { title: 'Inicio', icon: 'mdi-monitor-dashboard', local: "/home" },
-        { title: 'Novo Projeto', icon: 'mdi-folder-plus', local: "/newproject" },
         { title: 'Lista de Riscos', icon: 'mdi-clipboard-list-outline', local: "/risklist" },
         { title: 'Sair', icon: 'mdi-exit-to-app', local: "/logout" },
       ],

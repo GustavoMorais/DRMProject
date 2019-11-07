@@ -95,12 +95,22 @@ export default {
       }
   },
   methods: {
-    checkbox_select(evento) {
-      console.log(evento.target)
-      console.log({
-        status: evento.target.checked,
-        id: evento.target.value
-      })
+    async checkbox_select(evento) {
+      const resultado = await $.ajax({
+        type: "POST",
+        url: "https://dl.lucaspanao.ml/data.php",
+        data: {
+            projetoid: this.$session.get("projectviewid"),
+            idtarget: evento.target.value,
+            checked: evento.target.checked,
+            token: this.$session.get("token"),
+            mode: 7
+        }
+      }, "json");
+
+      if(resultado){
+        console.log(resultado);
+      }
     }
   },
   async created () {
@@ -133,12 +143,14 @@ export default {
             }
         }, "json");
         if (resultado2) {
+          console.log(this.$session.get("projectviewid"))
           resultado2.forEach(elemento => {
             this.listrisco.push({
               idtarget: elemento.id,
               nome: elemento.nome,
               checked: elemento.project_id === this.$session.get("projectviewid") ? true:false
             });
+            console.log(elemento.project_id === this.$session.get("projectviewid") ? elemento.id:0)
             this.selected.push(elemento.project_id === this.$session.get("projectviewid") ? elemento.id:0)
           });
         }
