@@ -101,6 +101,9 @@
     </v-form>
   </div>
 </template>
+<style>
+
+</style>
 <script>
 import {VMoney} from 'v-money';
 

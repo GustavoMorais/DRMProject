@@ -1,6 +1,6 @@
 <template>
   <v-container class="fill-height" fluid>
-    <v-row align="center" justify="center">
+    <v-row class="mx-0" align="center" justify="center">
       <v-col cols="12" sm="8" md="4">
         <v-card class="elevation-12">
           <v-toolbar color="primary" dark flat>
@@ -17,7 +17,7 @@
           </v-toolbar>
           <v-card-text>
             <v-form>
-              <v-text-field v-model="usuario" autocomplete="off" label="Usuário" prepend-icon="mdi-account" type="text"></v-text-field>
+              <v-text-field v-model="usuario" :rules="UserRule" autocomplete="off" label="Usuário" prepend-icon="mdi-account" type="text" pattern="[a-zA-Z0-9-]+"></v-text-field>
               <v-text-field v-model="senha" autocomplete="off" label="Senha" prepend-icon="mdi-lock" type="password"></v-text-field>
             </v-form>
           </v-card-text>
@@ -51,11 +51,14 @@ export default {
     snacktext: null,
     timeout: 3000,
     //============
-    dialog: false,
     drawer: null,
     loader: null,
     loading: false,
     //==== login input =====
+    UserRule: [
+      v => /(?!.*[\.\-\_]{2,})^[a-zA-Z0-9\.\-\_]{3,24}$/g.test(v) || 'Remova os caracteres inválidos',
+      v => v.length <= 20 || "O nome deve ser menor do que 20 caracteres"
+    ],
     usuario: null,
     senha: null
   }),
