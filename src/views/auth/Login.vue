@@ -59,8 +59,8 @@ export default {
       v => /(?!.*[\.\-\_]{2,})^[a-zA-Z0-9\.\-\_]{3,24}$/g.test(v) || 'Remova os caracteres inválidos',
       v => v.length <= 20 || "O nome deve ser menor do que 20 caracteres"
     ],
-    usuario: null,
-    senha: null
+    usuario: "",
+    senha: ""
   }),
   methods: {
     async login() {

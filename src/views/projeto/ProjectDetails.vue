@@ -129,10 +129,11 @@ export default {
           }, "json");
 
           if(resultado3){
-            console.log(resultado3);
-            resultado3.forEach(item => {
-              this.selected.push(item.risco_id)
-            })
+            if(resultado3.status !== "failed") {
+              resultado3.forEach(item => {
+                this.selected.push(item.risco_id)
+              })
+            }
           }
         }
       }else{

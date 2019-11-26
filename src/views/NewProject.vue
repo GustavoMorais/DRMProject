@@ -101,9 +101,6 @@
     </v-form>
   </div>
 </template>
-<style>
-
-</style>
 <script>
 import {VMoney} from 'v-money';
 
@@ -153,11 +150,37 @@ export default {
     ]
   }),
   methods: {
-    
+    async CriarNovoProjeto() {
+      if(this.projectname.length > 0 && this.responsavel.length > 0 &&
+         this.datadoprojeto > 0 && this.price.length > 0){
+          const response = await $.ajax({
+             type: "POST",
+             url: "https://dl.lucaspanao.ml/data.php",
+             data: {
+                mode: 3,
+                token: this.$session.get("token"),
+                nomeprojeto: this.projectname,
+                descricao: this.descricao,
+                empresa: this.empresa,
+                responsavel: this.responsavel,
+                dataprojeto: this.datadoprojeto,
+                valordoprojeto: this.price
+          }}, "json");
+          if(response.status === "done"){
+            this.$router.push('/home').catch(err => {})
+          }
+      }
+    }
   },
   created () {
-    
-    
+    function dateToYMD(date) {
+      var d = date.getDate();
+      var m = date.getMonth() + 1;
+      var y = date.getFullYear();
+      return '' + y + '-' + (m<=9 ? '0' + m : m) + '-' + (d <= 9 ? '0' + d : d);
+    }
+    this.date = dateToYMD(new Date());
+    this.datadoprojeto = (new Date(dateToYMD(new Date())).getTime() / 1000);
   }
 };
 </script>
