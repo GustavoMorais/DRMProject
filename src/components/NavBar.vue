@@ -80,7 +80,7 @@ export default {
         { title: 'Informações do Projeto', icon: 'mdi-folder-information', local: "/projectinfo" },
         { title: 'Novo Risco', icon: 'mdi-timeline-plus', local: "/newrisk" },
         { title: 'Identificação de Riscos', icon: 'mdi-file-document-box-search', local: "/riskidentify"},
-        { title: 'Análise Quantitativa', icon: 'mdi-file-settings-variant', local: "/analiseqt"},
+        { title: 'Análise Quantitativa', icon: 'mdi-file-settings-variant', local: "/analyze"},
         { title: 'Resposta aos Riscos', icon: 'mdi-hammer', local: "/respostarisk"},
         { title: 'Sair do projeto', icon: 'mdi-window-close', local: "/home"},
       ],

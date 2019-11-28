@@ -11,7 +11,7 @@
             <v-text-field
               v-model="riskname"
               :rules="NameRule"
-              :counter="20"
+              :counter="50"
               prepend-icon="mdi-bullhorn"
               label="Nome do Risco"
               required
@@ -78,7 +78,7 @@ export default {
       empresa: "",
       NameRule: [
         v => !!v || "Você precisa especificar um nome",
-        v => v.length <= 20 || "O nome deve ser menor do que 20 caracteres"
+        v => v.length <= 50 || "O nome deve ser menor do que 50 caracteres"
       ],
       CostRule: [
         v => !!v || "Você precisa especificar um custo"

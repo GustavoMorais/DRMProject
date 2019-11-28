@@ -14,7 +14,7 @@
       <v-col class="text-center" cols="12" sm="12">
         <div class="my-0">
           <v-btn block text><v-icon left>mdi-pencil</v-icon>Alterar as Informações</v-btn>
-          <v-btn block text small color="error"><v-icon left>mdi-delete</v-icon>Deletar o Projeto</v-btn>
+          <v-btn block text color="error" @click="DeletarProjeto"><v-icon left>mdi-delete</v-icon>Deletar o Projeto</v-btn>
         </div>
       </v-col>
     </div>
@@ -72,6 +72,22 @@ export default {
           mode: 8
         })
       )
+    },
+    DeletarProjeto() {
+      axios.post("https://dl.lucaspanao.ml/data.php",
+        qs.stringify({
+          projetoid: this.$session.get("projectviewid"),
+          token: this.$session.get("token"),
+          mode: 9
+        })
+      ).then(response => {
+        if(response.data.status === "done") {
+          //sair
+          this.$session.remove("projectviewid");
+          this.$bus.$emit("openproject", {die: true})
+          this.$router.push('/home').catch(err => {});
+        }
+      })
     }
   },
   created () {

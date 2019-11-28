@@ -6,7 +6,7 @@
         <v-banner>
           Não achamos nenhum projeto em sua conta, que tal adicionar um novo ?
           <template v-slot:actions>
-            <v-btn to="/newproject" text color="primary">Adicionar</v-btn>
+            <v-btn @click="dialognewproject = true" text color="primary">Adicionar</v-btn>
           </template>
         </v-banner>
       </div>
@@ -240,7 +240,6 @@ export default {
       ).then(response => {
         if (response.data.status !== "failed") {
           this.items = []
-          console.log(response)
           response.data.forEach((value, index) => {
             this.items.push({
               id: value.id,
