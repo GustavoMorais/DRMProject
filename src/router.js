@@ -26,11 +26,6 @@ export default new Router({
       component: () => import("./views/Home.vue")
     },
     {
-      path: "/newproject",
-      name: "newproject",
-      component: () => import("./views/NewProject.vue")
-    },
-    {
       path: "/logout",
       name: "logout",
       component: () => import("./views/Logout.vue")

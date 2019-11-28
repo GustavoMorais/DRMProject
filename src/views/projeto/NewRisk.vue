@@ -52,6 +52,8 @@
   </div>
 </template>
 <script>
+import axios from "axios"
+import qs from "qs"
 import {VMoney} from 'v-money';
 
 export default {
@@ -84,24 +86,23 @@ export default {
     };
   },
   methods: {
-      async adicionarRisco() {
+      adicionarRisco() {
           if(this.riskname.length > 0 && this.price.length > 0){
-              const resposta = await $.ajax({
-                  type: "POST",
-                  url: "https://dl.lucaspanao.ml/data.php",
-                  data: {
-                      mode: 5,
-                      token: this.$session.get("token"),
-                      projeto: this.$session.get("projectviewid"),
-                      risco: this.riskname,
-                      preco: this.price,
-                      probabilidade: this.slider
-                  },
-              }, "json");
-
-              if(resposta.status === "done"){
+            axios.post("https://dl.lucaspanao.ml/data.php",
+              qs.stringify({
+                mode: 5,
+                token: this.$session.get("token"),
+                userid: this.$session.get("userid"),
+                projeto: this.$session.get("projectviewid"),
+                risco: this.riskname,
+                preco: this.price,
+                probabilidade: this.slider
+              })
+            ).then(response => {
+              if(response.data.status === "done"){
                   this.$router.push('/projectinfo').catch(err => {})
               }
+            }) 
           }
       }
   },
